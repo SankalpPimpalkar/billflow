@@ -5,7 +5,7 @@ self.addEventListener('push', function (event) {
 
     const options = {
         body: data.body || 'You have a new update',
-        icon: '/icon.png',
+        icon: '/billflow.png',
         badge: '/badge.png',
         data: {
             billId: data.billId,

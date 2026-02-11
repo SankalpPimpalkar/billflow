@@ -30,12 +30,12 @@ export default function Navbar({ user }: { user: any }) {
                     </Link>
 
                     <div className="dropdown dropdown-end">
-                        <div tabIndex={0} role="button" className="avatar btn btn-sm btn-ghost border-none shadow-none hover:bg-transparent">
+                        <div tabIndex={0} role="button" className="avatar btn btn-sm btn-ghost border-none shadow-none bg-base-100">
                             <div className="mask mask-squircle w-8">
                                 <img src={user.picture} alt="User Avatar" />
                             </div>
                         </div>
-                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow border border-base-100 mt-2">
+                        <ul tabIndex={0} className="dropdown-content menu bg-base-200 rounded-box z-[1] w-52 p-2 shadow border border-base-100 mt-2">
                             <li>
                                 <button
                                     onClick={handleLogout}
