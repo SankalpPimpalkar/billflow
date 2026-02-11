@@ -1,10 +1,17 @@
 import GoogleSignInButton from "@/components/ui/buttons/GoogleSignInButton";
 import Link from "next/link";
 import { ArrowRight, BarChart3, Bell, ShieldCheck, Upload, TrendingUp, Zap, Clock } from "lucide-react";
+import { createClient } from "@/utils/supabase/server.supabase";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+
+  const supabase = await createClient(cookies())
+  const { data: { user } } = await supabase.auth.getUser()
+  const userData = user?.user_metadata
+
   return (
-    <div className="min-h-screen flex flex-col bg-base-300">
+    <div className="h-full min-h-screen flex flex-col bg-base-300">
       {/* Navbar */}
       <header className="navbar bg-base-200/80 sticky top-0 z-50 border-b border-base-100">
         <div className="container mx-auto px-4 flex items-center justify-between">
@@ -14,12 +21,22 @@ export default function Home() {
             </Link>
           </div>
           <div className="flex-none">
-            <GoogleSignInButton />
+            {
+              userData ? (
+                <Link href="/dashboard" className="btn btn-sm btn-primary">
+                  Go to Dashboard
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              ) : (
+                <GoogleSignInButton />
+              )
+            }
+
           </div>
         </div>
       </header>
 
-      <main className="flex-grow">
+      <main className="grow">
         {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden bg-base-100">
           <div className="container mx-auto px-4 relative z-10">
@@ -40,7 +57,16 @@ export default function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-                <GoogleSignInButton />
+                {
+                  userData ? (
+                    <Link href="/dashboard" className="btn btn-primary">
+                      Go to Dashboard
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  ) : (
+                    <GoogleSignInButton />
+                  )
+                }
                 <Link href="#features" className="btn btn-ghost group">
                   Learn more <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -65,7 +91,7 @@ export default function Home() {
           </div>
 
           {/* Decorative background elements */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-primary/10 rounded-full blur-[120px] -z-10" />
         </section>
 
         {/* Features Section */}
@@ -189,7 +215,17 @@ export default function Home() {
                 Join hundreds of users who are already managing their bills smarter.
               </p>
               <div className="pt-4">
-                <GoogleSignInButton />
+                {
+                  userData ? (
+                    <Link href="/dashboard" className="btn btn-primary">
+                      Go to Dashboard
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  ) : (
+                    <GoogleSignInButton />
+                  )
+                }
+
               </div>
             </div>
           </div>

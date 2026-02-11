@@ -2,3 +2,7 @@
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark, halloween;
 }
+
+html, body {
+  @apply bg-base-300 overscroll-y-none;
+}
