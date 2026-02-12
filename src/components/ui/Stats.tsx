@@ -2,7 +2,7 @@
 
 import { getStats } from '@/actions/stats.actions'
 import { useQuery } from '@tanstack/react-query'
-import { PiggyBankIcon, TrendingDown, AlertCircle, CalendarClock } from 'lucide-react'
+import { PiggyBankIcon, TrendingDown, AlertCircle, CalendarClock, TrendingUp } from 'lucide-react'
 import React from 'react'
 
 export default function Stats() {
@@ -28,7 +28,7 @@ export default function Stats() {
                 value={data?.totalOwed || 0}
                 icon={<PiggyBankIcon className='fill-secondary-content' />}
                 description="from last month"
-                change={12}
+                change={data?.change}
             />
             <StatCard
                 title="Overdue"
@@ -66,23 +66,29 @@ function StatCard({ title, value, icon, description, change, valueClassName = ''
                     ₹{value.toLocaleString()}
                 </h3>
                 <div className='flex items-center gap-2'>
-                    {change && (
-                        <span className='flex items-center gap-2 text-xs bg-base-100 px-2 py-1 w-fit rounded-full'>
-                            <TrendingDown className='size-4' />
-                            <p>
-                                +{change}%
-                            </p>
-                        </span>
-                    )}
+                    {
+                        change !== undefined && (
+                            <span className={`flex items-center gap-2 text-xs bg-base-100 px-2 py-1 w-fit rounded-full ${change < 0 ? 'text-error' : 'text-success'}`}>
+                                <>
+                                    {change < 0 ?
+                                        <TrendingDown className='size-4' /> : <TrendingUp className='size-4' />
+                                    }
+                                    <p>
+                                        {change > 0 ? `+${change}%` : `${change}%`}
+                                    </p>
+                                </>
+                            </span>
+                        )
+                    }
                     <p className='text-xs opacity-70'>
                         {description}
                     </p>
                 </div>
             </span>
 
-            <section className='pt-1'>
+            {/* <section className='pt-1'>
                 <progress className="progress w-full" value="30" max="100"></progress>
-            </section>
+            </section> */}
         </div>
     )
 }

@@ -22,20 +22,35 @@ export async function getStats() {
     let overdue = 0
     let upcoming = 0
 
-    // Mock logic for "change from last month" as we don't have historical snapshots
-    // In a real app, we'd query last month's data separately.
-    const change = 12
+    // Calculate last month's date range
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0)
+
+    let lastMonthOwed = 0
 
     bills.forEach(bill => {
+        const dueDate = new Date(bill.due_date)
+
+        // Calculate current month's unpaid bills
         if (!bill.is_paid) {
             totalOwed += bill.amount
-            if (new Date(bill.due_date) < now) {
+            if (dueDate < now) {
                 overdue += bill.amount
             } else {
                 upcoming += bill.amount
             }
         }
+
+        // Calculate last month's total (bills that were due in last month, regardless of paid status)
+        if (dueDate >= lastMonthStart && dueDate <= lastMonthEnd) {
+            lastMonthOwed += bill.amount
+        }
     })
+
+    // Calculate percentage change from last month
+    const change = lastMonthOwed > 0
+        ? Math.round(((totalOwed - lastMonthOwed) / lastMonthOwed) * 100)
+        : 0
 
     return {
         totalOwed,
